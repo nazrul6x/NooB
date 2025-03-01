@@ -1,10 +1,10 @@
 const axios = require('axios');
-
+ 
 const baseApiUrl = async () => {
-    const base = await axios.get(`https://raw.githubusercontent.com/Blankid018/D1PT0/main/baseApiUrl.json`);
+    const base = await axios.get(`https://raw.githubusercontent.com/nazrul6x/NooB/main/baseApiUrl.json`);
     return base.data.api;
 };
-
+ 
 module.exports.config = {
   name: "baby",
   version: "6.9.9",
@@ -18,31 +18,31 @@ module.exports.config = {
   prefix: true,
   usages: `[anyMessage] OR\nteach [YourMessage] - [Reply1], [Reply2], [Reply3]... OR\nteach [react] [YourMessage] - [react1], [react2], [react3]... OR\nremove [YourMessage] OR\nrm [YourMessage] - [indexNumber] OR\nmsg [YourMessage] OR\nlist OR\nall OR\nedit [YourMessage] - [NewMessage]`,
 };
-
+ 
 module.exports.run = async function ({ api, event, args, Users }) {
   try {
     const link = `${await baseApiUrl()}/baby`;
     const dipto = args.join(" ").toLowerCase();
     const uid = event.senderID;
-
+ 
     if (!args[0]) {
       const ran = ["Bolo baby", "hum", "type help baby", "type !baby hi"];
       const r = ran[Math.floor(Math.random() * ran.length)];
       return api.sendMessage(r, event.threadID, event.messageID);
     }
-
+ 
     if (args[0] === 'remove') {
       const fina = dipto.replace("remove ", "");
       const respons = await axios.get(`${link}?remove=${fina}&senderID=${uid}`);
       return api.sendMessage(respons.data.message, event.threadID, event.messageID);
     }
-
+ 
     if (args[0] === 'rm' && dipto.includes('-')) {
       const [fi, f] = dipto.replace("rm ", "").split(' - ');
       const respons = await axios.get(`${link}?remove=${fi}&index=${f}`);
       return api.sendMessage(respons.data.message, event.threadID, event.messageID);
     }
-
+ 
     if (args[0] === 'list') {
       if (args[1] === 'all') {
         const res = await axios.get(`${link}?list=all`);
@@ -61,13 +61,13 @@ module.exports.run = async function ({ api, event, args, Users }) {
         return api.sendMessage(`Total Teach = ${respo.data.length}`, event.threadID, event.messageID);
       }
     }
-
+ 
     if (args[0] === 'msg' || args[0] === 'message') {
       const fuk = dipto.replace("msg ", "");
       const respo = await axios.get(`${link}?list=${fuk}`);
       return api.sendMessage(`Message ${fuk} = ${respo.data.data}`, event.threadID, event.messageID);
     }
-
+ 
     if (args[0] === 'edit') {
       const command = dipto.split(' - ')[1];
       if (command.length < 2) {
@@ -76,7 +76,7 @@ module.exports.run = async function ({ api, event, args, Users }) {
       const res = await axios.get(`${link}?edit=${args[1]}&replace=${command}`);
       return api.sendMessage(`changed ${res.data.message}`, event.threadID, event.messageID);
     }
-
+ 
     if (args[0] === 'teach' && args[1] !== 'amar' && args[1] !== 'react') {
       const [comd, command] = dipto.split(' - ');
       const final = comd.replace("teach ", "");
@@ -87,7 +87,7 @@ module.exports.run = async function ({ api, event, args, Users }) {
       const name = await Users.getName(re.data.teacher) || "";
       return api.sendMessage(`✅ Replies added ${re.data.message}\nTeacher: ${name || "unknown"}\nTeachs: ${re.data.teachs}`, event.threadID, event.messageID);
     }
-
+ 
     if (args[0] === 'teach' && args[1] === 'amar') {
       const [comd, command] = dipto.split(' - ');
       const final = comd.replace("teach ", "");
@@ -97,7 +97,7 @@ module.exports.run = async function ({ api, event, args, Users }) {
       const re = await axios.get(`${link}?teach=${final}&senderID=${uid}&reply=${command}&key=intro`);
       return api.sendMessage(`✅ Replies added ${re.data.message}`, event.threadID, event.messageID);
     }
-
+ 
     if (args[0] === 'teach' && args[1] === 'react') {
       const [comd, command] = dipto.split(' - ');
       const final = comd.replace("teach react ", "");
@@ -107,12 +107,12 @@ module.exports.run = async function ({ api, event, args, Users }) {
       const re = await axios.get(`${link}?teach=${final}&react=${command}`);
       return api.sendMessage(`✅ Replies added ${re.data.message}`, event.threadID, event.messageID);
     }
-
+ 
     if (['amar name ki', 'amr nam ki', 'amar nam ki', 'amr name ki'].some(phrase => dipto.includes(phrase))) {
       const response = await axios.get(`${link}?text=amar name ki&senderID=${uid}&key=intro`);
       return api.sendMessage(response.data.reply, event.threadID, event.messageID);
     }
-
+ 
      const a = (await axios.get(`${link}?text=${dipto}&senderID=${uid}&font=1`)).data.reply;
     return api.sendMessage(a, event.threadID,
         (error, info) => {
@@ -125,13 +125,13 @@ module.exports.run = async function ({ api, event, args, Users }) {
             apiUrl: link
           });
         }, event.messageID);
-
+ 
   } catch (e) {
     console.error('Error in command execution:', e);
     return api.sendMessage(`Error: ${e.message}`, event.threadID, event.messageID);
   }
 };
-
+ 
 module.exports.handleReply = async function ({ api, event, handleReply }) {
 try{
   if (event.type == "message_reply") {
@@ -151,7 +151,7 @@ try{
 }catch(err){
     return api.sendMessage(`Error: ${err.message}`, event.threadID, event.messageID);
 }};
-
+ 
    
 module.exports.handleEvent = async function ({ api, event }) {
 try{
